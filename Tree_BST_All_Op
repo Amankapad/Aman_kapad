@@ -1,0 +1,119 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node {
+    int val;
+    struct node* left;
+    struct node* right;
+};
+// creation
+struct node* create_node(int value) {
+    struct node* newNode = malloc(sizeof(struct node));
+    newNode->val = value;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+// insertion
+struct node* insert_node(struct node* root, int value) {
+    if (root == NULL) {
+        return newNode(value);
+    }
+    if (value < root->val) {
+        root->left = insert_node(root->left, value);
+    } else if (value > root->val) {
+        root->right = insert_node(root->right, value);
+    }
+    return root;
+}
+// Pre-order_traversal
+void pre_order_traversal(struct node* root) {
+    if (root != NULL) {
+        printf("%d ", root->val);
+        pre_order_traversal(root->left);
+        pre_order_traversal(root->right);
+    }
+}
+// In-order_traversal
+void in_order_traversal(struct node* root) {
+    if (root != NULL) {
+        in_order_traversal(root->left);
+        printf("%d ", root->val);
+        in_order_traversal(root->right);
+    }
+}
+// Post-order_traversal
+void post_order_traversal(struct node* root) {
+    if (root != NULL) {
+        post_order_traversal(root->left);
+        post_order_traversal(root->right);
+        printf("%d ", root->val);
+    }
+}
+// search for an element in the BST
+struct node* search_element(struct node* root, int value) {
+    if (root == NULL || root->val == value) {
+        return root;
+    }
+    if (value < root->val) {
+        return search_element(root->left, value);
+    } else {
+        return search_element(root->right, value);
+    }
+}
+// find the smallest element
+int find_smallest(struct node* root) {
+    while (root->left != NULL) {
+        root = root->left;
+    }
+    return root->val;
+}
+// find the largest element
+int find_largest(struct node* root) {
+    while (root->right != NULL) {
+        root = root->right;
+    }
+    return root->val;
+}
+// find the height
+int find_height(struct node* root) {
+    if (root == NULL) {
+        return -1;
+    }
+    
+    int left_height = find_height(root->left);
+    int right_height = find_height(root->right);
+    
+    return (left_height > right_height ? left_height : right_height) + 1;
+}
+int main() {
+    struct node* root = NULL;
+// Insert nodes into the BST
+    root = insert_node(root, 4);
+    insert_node(root, 2);
+    insert_node(root, 6);
+    insert_node(root, 1);
+    insert_node(root, 3);
+    insert_node(root, 7);
+    printf("Pre-order traversal: ");
+    pre_order_traversal(root);
+    printf("\n");
+    printf("In-order traversal: ");
+    in_order_traversal(root);
+    printf("\n");
+    printf("Post-order traversal: ");
+    post_order_traversal(root);
+    printf("\n");
+    int search_value = 3;
+    struct node* search_result = search_element(root, search_value);
+    if (search_result != NULL) {
+        printf("Element %d found in the BST.\n", search_value);
+    } else {
+        printf("Element %d not found in the BST.\n", search_value);
+    }
+    int smallest = find_smallest(root);
+    int largest = find_largest(root);
+    printf("Smallest element: %d\n", smallest);
+    printf("Largest element: %d\n", largest);
+    int height = find_height(root);
+    printf("Height of the BST: %d\n", height);
+    return 0;
+}
